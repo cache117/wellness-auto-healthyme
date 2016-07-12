@@ -14,8 +14,6 @@
 # limitations under the License.
 
 
-docker run --rm -it -v $(pwd):/usr/src/app wellness-auto-healthyme python dailygoals2json.py $1 $2 > import.json
-
 docker run -d -P --name=selenium_hub selenium/standalone-chrome
 port=`docker port selenium_hub | sed -e "s/.*://"`
 docker run --rm -it -v $(pwd):/usr/src/app --link=selenium_hub wellness-auto-healthyme python import.py import.json
