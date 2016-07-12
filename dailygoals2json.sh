@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-docker run --rm -it -v $(pwd):/usr/src/app wellness-auto-healthyme python dailygoals2json.py $1 $2 > import.json
+docker run --rm -v $(pwd):/usr/src/app wellness-auto-healthyme python dailygoals2json.py $1 $2 > import.json

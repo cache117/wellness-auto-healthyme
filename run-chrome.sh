@@ -16,5 +16,5 @@
 
 docker run -d -P --name=selenium_hub selenium/standalone-chrome
 port=`docker port selenium_hub | sed -e "s/.*://"`
-docker run --rm -it -v $(pwd):/usr/src/app --link=selenium_hub wellness-auto-healthyme python import.py import.json
+docker run --rm -v $(pwd):/usr/src/app --link=selenium_hub wellness-auto-healthyme python import.py import.json
 docker rm -f selenium_hub
