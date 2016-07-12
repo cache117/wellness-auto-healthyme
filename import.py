@@ -117,6 +117,7 @@ def run(json_filename):
         if row['sleep_7_or_more_hours']:
             driver.find_element_by_id("dc_3").click() # 7 or more hours of sleep
         driver.find_element_by_css_selector("button.greenButton").click() # Save Changes button
+        print("{} imported".format(row['date_str']))
         time.sleep(1)
         if EC.alert_is_present():
             alert = driver.switch_to_alert()
@@ -135,3 +136,4 @@ if __name__ == "__main__":
         parser.error("The jsonfilename passed in ({}) doesn't exist".format(args.jsonfilename))
     else:
         run(args.jsonfilename)
+
