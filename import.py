@@ -15,11 +15,14 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.support import expected_conditions as EC
 import os
 import datetime
 import time
 import json
 import config
+
+time.sleep(1)
 
 def date_is_sunday(date_str):
     dateobj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
@@ -76,7 +79,6 @@ def get_dates_for_challenge(driver):
     return date_pair
 
 def get_current_points(driver):
-    import pdb; pdb.set_trace()
     driver.get('http://wellness.byu.edu/healthyME/dashboard/challenge=' + str(config.current_challenge))
     element = driver.find_element_by_css_selector('#divProgress > input')
     return int(element.get_attribute('value'))
@@ -115,11 +117,14 @@ def run(json_filename):
         if row['sleep_7_or_more_hours']:
             driver.find_element_by_id("dc_3").click() # 7 or more hours of sleep
         driver.find_element_by_css_selector("button.greenButton").click() # Save Changes button
-        time.sleep(.5)
+        time.sleep(1)
+        if EC.alert_is_present():
+            alert = driver.switch_to_alert()
+            alert.accept()
 
     # show current points and percentage
     points = get_current_points(driver)
-    print("{} points earned so far.  {}% completed".format(points, round((points/150.0)*100, 0)))
+    print("{} of 150 points earned so far.  Challenge {} is {}% completed".format(points, config.current_challenge, round((points/150.0)*100, 0)))
 
 if __name__ == "__main__":
     import argparse
