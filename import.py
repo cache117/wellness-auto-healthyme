@@ -49,8 +49,8 @@ def get_dates_for_challenge(driver):
         time.sleep(1)
         seconds_waited += 1
         print("waited {} seconds to redirect after cas authn".format(seconds_waited))
-        if seconds_waited > 30:
-            raise Exception("Login problem > 30 seconds after login")
+        if seconds_waited > 60:
+            raise Exception("Login problem > 60 seconds after login")
     if config.current_challenge == 1:
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(1) > td:nth-child(1) > p:nth-child(3)')
     elif config.current_challenge == 2:
