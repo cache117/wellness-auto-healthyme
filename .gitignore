@@ -90,3 +90,4 @@ ENV/
 
 # Repo-specific things
 config.py
+import.json
