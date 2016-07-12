@@ -101,8 +101,17 @@ def run(json_filename):
     rows = get_obj_from_json_filename(json_filename)
     assert_valid_rows(rows, start_date, end_date)
 
+    # open the import record file
+    if not os.path.exists('.import_record_file'):
+        open('.import_record_file', 'w').close()    
+    import_records = [item.strip() for item in open('.import_record_file', 'r').readlines()]
+    import_record_fileobj = open('.import_record_file', 'a')
+
     # enter rows in site
     for row in rows:
+        if row['date_str'] in import_records:
+            print('{} has already been imported.  It\'s in .import_record_file.  Skipping it.'.format(row['date_str']))
+            continue
         driver.get("http://wellness.byu.edu/healthyME/index.php?page=tracker&date={}&challenge={}".format(row['date_str'], config.current_challenge))
         driver.find_element_by_id("activityDescription").clear()
         driver.find_element_by_id("activityDescription").send_keys(row['physical_activity_description'])
@@ -118,10 +127,14 @@ def run(json_filename):
             driver.find_element_by_id("dc_3").click() # 7 or more hours of sleep
         driver.find_element_by_css_selector("button.greenButton").click() # Save Changes button
         print("{} imported".format(row['date_str']))
+        import_record_fileobj.write(row['date_str'] + "\n")
+        import_record_fileobj.flush()
         time.sleep(1)
         if EC.alert_is_present():
             alert = driver.switch_to_alert()
             alert.accept()
+
+    import_record_fileobj.close()
 
     # show current points and percentage
     points = get_current_points(driver)

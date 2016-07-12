@@ -1,1 +1,4 @@
 selenium
+oauth2client
+PyOpenSSL
+gspread
