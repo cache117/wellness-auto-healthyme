@@ -7,6 +7,7 @@ This codebase uses python, docker and selenium webdriver.
 
 Here's how to use it.
 - clone the repo
+- run `cp config-example.py config.py` and edit config.py with your information.
 - build the docker container with `./build.sh`
 - create an `import.json` file with the [following format](#importjson-file-format).  The `dailygoals2json.py` script is an example that I use to create an `import.json` file from a google spreadsheet where I keep this data.
 - run the selenium script that will import the data in `import.json` into the wellness.byu.edu site like so, `./run-chrome.sh`
