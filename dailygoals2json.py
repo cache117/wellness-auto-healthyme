@@ -33,7 +33,7 @@ def go(startdate, enddate):
                 'physical_activity_description': 'walking',
                 'activity_minutes': exercised,
                 'water_5_or_more_cups': (str2num(wateroz)/8) >= 5,
-                'fruit_veg_3_or_more_servings': str2num(servings_fruit_veg) >= 3,
+                'fruit_veg_4_or_more_servings': str2num(servings_fruit_veg) >= 4,
                 'sleep_7_or_more_hours': str2num(hours_slept) >= 7})
     print(json.dumps(results))
 
