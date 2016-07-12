@@ -1,0 +1,5 @@
+[Unit]
+Description=Run wellness.service every weekday at 9:50am
+
+[Timer]
+OnCalendar=Mon,Tue,Wed,Thu,Fri *-*-* 09:50:00

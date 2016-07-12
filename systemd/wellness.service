@@ -1,0 +1,6 @@
+[Unit]
+Description=Imports into wellness.byu.edu from my google spreadsheet
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'cd /home/core/dev/wellness-auto-healthyme; ./dailygoals2json.sh `date -d "$(date +%Y-%m-01)" +%F` `date -d "$(date +%Y-%m-01) +1 month -1 day" +%F`; ./run-chrome.sh'
