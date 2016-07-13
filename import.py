@@ -121,8 +121,8 @@ def run(json_filename):
         # the following checkboxes are not idempotent
         if row['water_5_or_more_cups']:
             driver.find_element_by_id("dc_1").click() # 5 or more cups of water
-        if row['fruit_veg_3_or_more_servings']:
-            driver.find_element_by_id("dc_2").click() # 3 or more servings of fruit and/or veggies
+        if row['fruit_veg_4_or_more_servings']:
+            driver.find_element_by_id("dc_2").click() # 4 or more servings of fruit and/or veggies
         if row['sleep_7_or_more_hours']:
             driver.find_element_by_id("dc_3").click() # 7 or more hours of sleep
         driver.find_element_by_css_selector("button.greenButton").click() # Save Changes button
