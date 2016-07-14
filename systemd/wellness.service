@@ -2,5 +2,7 @@
 Description=Imports into wellness.byu.edu from my google spreadsheet
 
 [Service]
+User=core
+Group=core
 Type=oneshot
 ExecStart=/bin/bash -c 'cd /home/core/dev/wellness-auto-healthyme; ./go.sh'

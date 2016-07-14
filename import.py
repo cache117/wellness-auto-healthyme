@@ -21,6 +21,7 @@ import datetime
 import time
 import json
 import configparser
+from os.path import expanduser
 
 time.sleep(1)
 config = configparser.ConfigParser()
