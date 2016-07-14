@@ -6,7 +6,7 @@ HealthyME is a service to BYU employees and it is accessible from the http://wel
 This codebase uses python, docker and selenium webdriver.
 
 Here's how to use it.
-- clone the repo
+- clone the repo on a machine that can run docker.
 - run `cp config-example.py config.py` and edit `config.py` with your information.
 - build the docker container with `./build.sh`
 - create an `import.json` file in the [following format](#importjson-file-format).  The `dailygoals2json.py` script is an example that I use to create an `import.json` file from a google spreadsheet where I keep this data.
