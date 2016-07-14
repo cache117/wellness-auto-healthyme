@@ -20,9 +20,13 @@ import os
 import datetime
 import time
 import json
-import config
+import configparser
 
 time.sleep(1)
+config = configparser.ConfigParser()
+home = expanduser("~")
+config.read_file(open(home + '/.byu/netid.ini', 'r'))
+config.read_file(open(home + '/.byu/wellness.ini', 'r'))
 
 def date_is_sunday(date_str):
     dateobj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
@@ -51,23 +55,24 @@ def get_dates_for_challenge(driver):
         print("waited {} seconds to redirect after cas authn".format(seconds_waited))
         if seconds_waited > 60:
             raise Exception("Login problem > 60 seconds after login")
-    if config.current_challenge == 1:
+    current_challenge = int(config['wellness']['current_challenge'])
+    if current_challenge == 1:
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(1) > td:nth-child(1) > p:nth-child(3)')
-    elif config.current_challenge == 2:
+    elif current_challenge == 2:
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(1) > td:nth-child(2) > p:nth-child(3)')
-    elif config.current_challenge == 3:
+    elif current_challenge == 3:
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(1) > td:nth-child(3) > p:nth-child(3)')
-    elif config.current_challenge == 4:
+    elif current_challenge == 4:
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(2) > td:nth-child(1) > p:nth-child(3)')
-    elif config.current_challenge == 5:
+    elif current_challenge == 5:
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(2) > td:nth-child(2) > p:nth-child(3)')
-    elif config.current_challenge == 6:
+    elif current_challenge == 6:
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(2) > td:nth-child(3) > p:nth-child(3)')
     else:
-        raise Exception("Invalid value ({}) for config.current_challenge.  It must be an integer between 1 and 6 inclusive.".format(config.current_challenge))
+        raise Exception("Invalid value ({}) for current_challenge.  It must be an integer between 1 and 6 inclusive.".format(current_challenge))
     
     if element.text.startswith("Begins in"):
-        raise Exception("Invalid value ({}) for config.current_challenge.  The specified challenge hasn't started yet.  It {}.".format(config.current_challenge, element.text.lower()))
+        raise Exception("Invalid value ({}) for current_challenge.  The specified challenge hasn't started yet.  It {}.".format(current_challenge, element.text.lower()))
     else:
         # 'From July 1st\nto August 31th'
         date_pair_str = element.text
@@ -79,7 +84,8 @@ def get_dates_for_challenge(driver):
     return date_pair
 
 def get_current_points(driver):
-    driver.get('http://wellness.byu.edu/healthyME/dashboard/challenge=' + str(config.current_challenge))
+    current_challenge = int(config['wellness']['current_challenge'])
+    driver.get('http://wellness.byu.edu/healthyME/dashboard/challenge=' + str(current_challenge))
     element = driver.find_element_by_css_selector('#divProgress > input')
     return int(element.get_attribute('value'))
                 
@@ -91,9 +97,9 @@ def run(json_filename):
     # login
     driver.get("http://wellness.byu.edu/healthyME/")
     driver.find_element_by_id("netid").clear()
-    driver.find_element_by_id("netid").send_keys(config.net_id)
+    driver.find_element_by_id("netid").send_keys(config['netid']['username'])
     driver.find_element_by_id("password").clear()
-    driver.find_element_by_id("password").send_keys(config.net_id_password)
+    driver.find_element_by_id("password").send_keys(config['netid']['password'])
     driver.find_element_by_css_selector("input.submit").click()
 
     # get and validate rows
@@ -108,11 +114,12 @@ def run(json_filename):
     import_record_fileobj = open('.import_record_file', 'a')
 
     # enter rows in site
+    current_challenge = int(config['wellness']['current_challenge'])
     for row in rows:
         if row['date_str'] in import_records:
             print('{} has already been imported.  It\'s in .import_record_file.  Skipping it.'.format(row['date_str']))
             continue
-        driver.get("http://wellness.byu.edu/healthyME/index.php?page=tracker&date={}&challenge={}".format(row['date_str'], config.current_challenge))
+        driver.get("http://wellness.byu.edu/healthyME/index.php?page=tracker&date={}&challenge={}".format(row['date_str'], current_challenge))
         driver.find_element_by_id("activityDescription").clear()
         driver.find_element_by_id("activityDescription").send_keys(row['physical_activity_description'])
         driver.find_element_by_id("activityDuration").clear()
@@ -138,7 +145,7 @@ def run(json_filename):
 
     # show current points and percentage
     points = get_current_points(driver)
-    print("{} of 150 points earned so far.  Challenge {} is {}% completed".format(points, config.current_challenge, round((points/150.0)*100, 0)))
+    print("{} of 150 points earned so far.  Challenge {} is {}% completed".format(points, current_challenge, round((points/150.0)*100, 0)))
 
 if __name__ == "__main__":
     import argparse
