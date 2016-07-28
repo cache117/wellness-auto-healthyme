@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash -ex
 # Copyright 2016 Brigham Young University
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-docker run -d -P --name=selenium_hub selenium/standalone-chrome
-port=`docker port selenium_hub | sed -e "s/.*://"`
-docker run --rm -v $HOME/.byu:/root/.byu -v $(pwd):/usr/src/app --link=selenium_hub wellness-auto-healthyme python import.py import.json
-docker rm -f selenium_hub
+docker run --rm -v $(pwd):/usr/src/app wellness-auto-healthyme python dailygoals2json.py $1 $2 > import.json

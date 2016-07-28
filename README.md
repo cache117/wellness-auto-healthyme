@@ -6,9 +6,11 @@ HealthyME is a service to BYU employees and it is accessible from the http://wel
 This codebase uses python, docker and selenium webdriver.
 
 Here's how to use it.
-- clone the repo
+- clone the repo on a machine that can run docker.
+- create a file called ~/.byu/netid.ini with the [following format](#netidini-format).  Note, the file is not part of the repo to lessen the possibility that it is checked into github.  
+- create a file called ~/.byu/wellness.ini with the [following format](#wellnessini-format).  
 - build the docker container with `./build.sh`
-- create an `import.json` file with the [following format](#importjson-file-format).  The `dailygoals2json.py` script is an example that I use to create an `import.json` file from a google spreadsheet where I keep this data.
+- create an `import.json` file in the [following format](#importjson-file-format).  The `dailygoals2json.py` script is an example that I use to create an `import.json` file from a google spreadsheet where I keep this data.
 - run the selenium script that will import the data in `import.json` into the wellness.byu.edu site like so, `./run-chrome.sh`
 - enjoy all the time you saved!
 
@@ -21,11 +23,25 @@ Here's how to use it.
       "sleep_7_or_more_hours": true, 
       "activity_minutes": "0", 
       "water_5_or_more_cups": true, 
-      "fruit_veg_3_or_more_servings": true, 
+      "fruit_veg_4_or_more_servings": true, 
       "physical_activity_description": "walking"
     }
   ]
 }
+```
+
+## netid.ini format
+```
+[netid]
+username = 
+password = 
+```
+
+## wellness.ini format
+```
+[wellness]
+# a number between 1 and 6 inclusive
+current_challenge = 
 ```
 
 # current limitations (PRs welcome!)

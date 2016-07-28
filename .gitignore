@@ -93,7 +93,6 @@ ENV/
 .ropeproject
 
 # Repo-specific things
-config.py
 import.json
 daily_goals.json
 .import_record_file
