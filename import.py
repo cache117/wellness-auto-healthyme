@@ -132,12 +132,12 @@ def run(json_filename):
 
         # 60 minutes of activity is worth 4 points (the max for this section of the lifestyle tracker), and 12000 steps
         # are worth 4 points. Input the one that gets the most points.
-        max_minutes_scored = 60
-        max_steps_scored = 12000
+        max_minutes_scored = 60.0
+        max_steps_scored = 12000.0
         minutes_points = row['activity_minutes'] / max_minutes_scored
         steps_points = row['steps'] / max_steps_scored
         if steps_points >= minutes_points:
-            driver.find_element_by_id("trackingTypeMinutes").click()
+            driver.find_element_by_id("trackingTypeSteps").click()
             driver.find_element_by_id("activitySteps").clear()
             driver.find_element_by_id("activitySteps").send_keys(row['steps'])
         else:
