@@ -1,6 +1,4 @@
-# IntelliJ files
-*.iml
-.idea/
+config-example.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -96,4 +94,3 @@ ENV/
 import.json
 daily_goals.json
 .import_record_file
-
