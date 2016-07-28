@@ -42,9 +42,7 @@ def assert_valid_rows(rows, start_date, end_date):
             raise Exception("This row is invalid.  The date is a sunday which is not allowed by the site.")
         if not (start_date <= datetime.datetime.strptime(row['date_str'], '%Y-%m-%d') <= end_date):
             print(row)
-            raise Exception(
-                    "This row is invalid.  The date ({}) is not inside within the current challenge dates ({} - {})".format(
-                            row['date_str'], start_date, end_date))
+            raise Exception("This row is invalid.  The date ({}) is not inside within the current challenge dates ({} - {})".format(row['date_str'], start_date, end_date))
 
 
 def get_obj_from_json_filename(json_filename):
@@ -64,32 +62,22 @@ def get_dates_for_challenge(driver):
             raise Exception("Login problem > 60 seconds after login")
     current_challenge = int(config['wellness']['current_challenge'])
     if current_challenge == 1:
-        element = driver.find_element_by_css_selector(
-                '#challenges > tbody > tr:nth-child(1) > td:nth-child(1) > p:nth-child(3)')
+        element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(1) > td:nth-child(1) > p:nth-child(3)')
     elif current_challenge == 2:
-        element = driver.find_element_by_css_selector(
-                '#challenges > tbody > tr:nth-child(1) > td:nth-child(2) > p:nth-child(3)')
+        element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(1) > td:nth-child(2) > p:nth-child(3)')
     elif current_challenge == 3:
-        element = driver.find_element_by_css_selector(
-                '#challenges > tbody > tr:nth-child(1) > td:nth-child(3) > p:nth-child(3)')
+        element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(1) > td:nth-child(3) > p:nth-child(3)')
     elif current_challenge == 4:
-        element = driver.find_element_by_css_selector(
-                '#challenges > tbody > tr:nth-child(2) > td:nth-child(1) > p:nth-child(3)')
+        element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(2) > td:nth-child(1) > p:nth-child(3)')
     elif current_challenge == 5:
-        element = driver.find_element_by_css_selector(
-                '#challenges > tbody > tr:nth-child(2) > td:nth-child(2) > p:nth-child(3)')
+        element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(2) > td:nth-child(2) > p:nth-child(3)')
     elif current_challenge == 6:
-        element = driver.find_element_by_css_selector(
-                '#challenges > tbody > tr:nth-child(2) > td:nth-child(3) > p:nth-child(3)')
+        element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(2) > td:nth-child(3) > p:nth-child(3)')
     else:
-        raise Exception(
-                "Invalid value ({}) for current_challenge.  It must be an integer between 1 and 6 inclusive.".format(
-                        current_challenge))
+        raise Exception("Invalid value ({}) for current_challenge.  It must be an integer between 1 and 6 inclusive.".format(current_challenge))
 
     if element.text.startswith("Begins in"):
-        raise Exception(
-                "Invalid value ({}) for current_challenge.  The specified challenge hasn't started yet.  It {}.".format(
-                        current_challenge, element.text.lower()))
+        raise Exception("Invalid value ({}) for current_challenge.  The specified challenge hasn't started yet.  It {}.".format(current_challenge, element.text.lower()))
     else:
         # 'From July 1st\nto August 31th'
         date_pair_str = element.text
@@ -176,8 +164,7 @@ def run(json_filename):
 
     # show current points and percentage
     points = get_current_points(driver)
-    print("{} of 150 points earned so far.  Challenge {} is {}% completed".format(points, current_challenge,
-                                                                                  round((points / 150.0) * 100, 0)))
+    print("{} of 150 points earned so far.  Challenge {} is {}% completed".format(points, current_challenge, round((points / 150.0) * 100, 0)))
 
 
 if __name__ == "__main__":
