@@ -22,7 +22,7 @@ Here's how to use it.
       "date_str": "2016-07-01", 
       "sleep_7_or_more_hours": true, 
       "activity_minutes": "0",
-      "steps": 5000,
+      "steps": "5000",
       "water_5_or_more_cups": true, 
       "fruit_veg_4_or_more_servings": true, 
       "physical_activity_description": "walking"
