@@ -10,7 +10,7 @@ Here's how to use it.
 - create a file called ~/.byu/netid.ini with the [following format](#netidini-format).  Note, the file is not part of the repo to lessen the possibility that it is checked into github.  
 - create a file called ~/.byu/wellness.ini with the [following format](#wellnessini-format).  
 - build the docker container with `./build.sh`
-- create an `import.json` file in the [following format](#importjson-file-format).  The `dailygoals2json.py` script is an example that I use to create an `import.json` file from a google spreadsheet where I keep this data.
+- create an `import.json` file in the [following format](#importjson-file-format).  The `dailygoals2json.py` script is an example that I use to create an `import.json` file from a google spreadsheet where I keep this data. Also, see [this repo](https://github.com/cache117/fitbit-csv-data) to turn Fitbit data into an `import.json` file.
 - run the selenium script that will import the data in `import.json` into the wellness.byu.edu site like so, `./run-chrome.sh`
 - enjoy all the time you saved!
 
