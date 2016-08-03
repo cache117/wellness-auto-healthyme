@@ -14,7 +14,7 @@ Here's how to use it.
 - run the selenium script that will import the data in `import.json` into the wellness.byu.edu site like so, `./run-chrome.sh`
 - enjoy all the time you saved!
 
-<a name="config-path-footnote"><sup>[1]</sup></a> In Windows, ~ likely refers to `C:\Users\your-user\`. So, you would have`C:\Users\your-user\.byu\netid.ini`. Additionally, to create a directory starting with `.`, you name it like this `.byu.`
+<a name="config-path-footnote"><sup>[1]</sup></a> <sub>In Windows, ~ likely refers to `C:\Users\your-user\`. So, you would have`C:\Users\your-user\.byu\netid.ini`. Additionally, to create a directory starting with `.`, you name it like this `.byu.`<sub>
 
 ## import.json file format
 ```
