@@ -7,8 +7,8 @@ This codebase uses python, docker and selenium webdriver.
 
 Here's how to use it.
 - clone the repo on a machine that can run docker.
-- create a file called `~/.byu/netid.ini`<sup>[1](#myfootnote1)</sup> with the [following format](#netidini-format).  Note, the file is not part of the repo to lessen the possibility that it is checked into github.  
-- create a file called `~/.byu/wellness.ini`<sup>[1](#myfootnote1)</sup> with the [following format](#wellnessini-format).  
+- create a file called `~/.byu/netid.ini`<sup>[1](#config-path-footnote)</sup> with the [following format](#netidini-format).  Note, the file is not part of the repo to lessen the possibility that it is checked into github.  
+- create a file called `~/.byu/wellness.ini`<sup>[1](#config-path-footnote)</sup> with the [following format](#wellnessini-format).  
 - build the docker container with `./build.sh`
 - create an `import.json` file in the [following format](#importjson-file-format).  The `dailygoals2json.py` script is an example that I use to create an `import.json` file from a google spreadsheet where I keep this data. Also, see [this repo](https://github.com/cache117/fitbit-csv-data) to turn Fitbit data into an `import.json` file.
 - run the selenium script that will import the data in `import.json` into the wellness.byu.edu site like so, `./run-chrome.sh`
