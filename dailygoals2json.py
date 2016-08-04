@@ -16,7 +16,7 @@ def go(startdate, enddate):
     results['rows'] = []
 
     def str2num(val):
-        if not val: 
+        if not val:
             return 0
         else:
             return float(val)
@@ -44,4 +44,3 @@ if __name__ == "__main__":
     parser.add_argument('enddate')
     args = parser.parse_args()
     go(args.startdate, args.enddate)
-

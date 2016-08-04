@@ -29,24 +29,28 @@ home = expanduser("~")
 config.read_file(open(home + '/.byu/netid.ini', 'r'))
 config.read_file(open(home + '/.byu/wellness.ini', 'r'))
 
+
 def date_is_sunday(date_str):
     dateobj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-    return dateobj.weekday() == 6 # https://docs.python.org/3/library/datetime.html#datetime.date.weekday
+    return dateobj.weekday() == 6  # https://docs.python.org/3/library/datetime.html#datetime.date.weekday
+
 
 def assert_valid_rows(rows, start_date, end_date):
     for row in rows:
-        if date_is_sunday(row['date_str']):
-            print(row)
-            raise Exception("This row is invalid.  The date is a sunday which is not allowed by the site.")
+        # if date_is_sunday(row['date_str']):
+            # print(row)
+            # raise Exception("This row is invalid.  The date is a sunday which is not allowed by the site.")
         if not (start_date <= datetime.datetime.strptime(row['date_str'], '%Y-%m-%d') <= end_date):
             print(row)
             raise Exception("This row is invalid.  The date ({}) is not inside within the current challenge dates ({} - {})".format(row['date_str'], start_date, end_date))
+
 
 def get_obj_from_json_filename(json_filename):
     reader = open(json_filename, 'r')
     json_str = reader.read()
     reader.close()
     return json.loads(json_str)['rows']
+
 
 def get_dates_for_challenge(driver):
     seconds_waited = 0
@@ -71,7 +75,7 @@ def get_dates_for_challenge(driver):
         element = driver.find_element_by_css_selector('#challenges > tbody > tr:nth-child(2) > td:nth-child(3) > p:nth-child(3)')
     else:
         raise Exception("Invalid value ({}) for current_challenge.  It must be an integer between 1 and 6 inclusive.".format(current_challenge))
-    
+
     if element.text.startswith("Begins in"):
         raise Exception("Invalid value ({}) for current_challenge.  The specified challenge hasn't started yet.  It {}.".format(current_challenge, element.text.lower()))
     else:
@@ -81,15 +85,17 @@ def get_dates_for_challenge(driver):
         date_pair = [item[:-2] for item in date_pair]
         date_pair = [item + ' ' + str(datetime.datetime.today().year) for item in date_pair]
         date_pair = [datetime.datetime.strptime(item, '%B %d %Y') for item in date_pair]
-    
+
     return date_pair
+
 
 def get_current_points(driver):
     current_challenge = int(config['wellness']['current_challenge'])
     driver.get('http://wellness.byu.edu/healthyME/dashboard/challenge=' + str(current_challenge))
     element = driver.find_element_by_css_selector('#divProgress > input')
     return int(element.get_attribute('value'))
-                
+
+
 def run(json_filename):
     url = os.environ['SELENIUM_HUB_PORT_4444_TCP'].replace('tcp', 'http')
     driver = webdriver.Remote(url + '/wd/hub', webdriver.DesiredCapabilities.CHROME.copy())
@@ -110,7 +116,7 @@ def run(json_filename):
 
     # open the import record file
     if not os.path.exists('.import_record_file'):
-        open('.import_record_file', 'w').close()    
+        open('.import_record_file', 'w').close()
     import_records = [item.strip() for item in open('.import_record_file', 'r').readlines()]
     import_record_fileobj = open('.import_record_file', 'a')
 
@@ -118,22 +124,38 @@ def run(json_filename):
     current_challenge = int(config['wellness']['current_challenge'])
     for row in rows:
         if row['date_str'] in import_records:
-            print('{} has already been imported.  It\'s in .import_record_file.  Skipping it.'.format(row['date_str']))
+            print('{} has already been imported.  It\'s in .import_record_file. Skipping it.'.format(row['date_str']))
+            continue
+        if date_is_sunday(row['date_str']):
+            print('{} is a Sunday, which is not allowed by the site. Skipping it.'.format(row['date_str']))
             continue
         driver.get("http://wellness.byu.edu/healthyME/index.php?page=tracker&date={}&challenge={}".format(row['date_str'], current_challenge))
         driver.find_element_by_id("activityDescription").clear()
         driver.find_element_by_id("activityDescription").send_keys(row['physical_activity_description'])
-        driver.find_element_by_id("activityDuration").clear()
-        driver.find_element_by_id("trackingTypeMinutes").click()
-        driver.find_element_by_id("activityDuration").send_keys(row['activity_minutes'])
+
+        # 60 minutes of activity is worth 4 points (the max for this section of the lifestyle tracker), and 12000 steps
+        # are worth 4 points. Input the one that gets the most points.
+        max_minutes_scored = 60.0
+        max_steps_scored = 12000.0
+        minutes_points = row['activity_minutes'] / max_minutes_scored
+        steps_points = row['steps'] / max_steps_scored
+        if steps_points >= minutes_points:
+            driver.find_element_by_id("trackingTypeSteps").click()
+            driver.find_element_by_id("activitySteps").clear()
+            driver.find_element_by_id("activitySteps").send_keys(row['steps'])
+        else:
+            driver.find_element_by_id("trackingTypeMinutes").click()
+            driver.find_element_by_id("activityDuration").clear()
+            driver.find_element_by_id("activityDuration").send_keys(row['activity_minutes'])
+
         # the following checkboxes are not idempotent
         if row['water_5_or_more_cups']:
-            driver.find_element_by_id("dc_1").click() # 5 or more cups of water
+            driver.find_element_by_id("dc_1").click()  # 5 or more cups of water
         if row['fruit_veg_4_or_more_servings']:
-            driver.find_element_by_id("dc_2").click() # 4 or more servings of fruit and/or veggies
+            driver.find_element_by_id("dc_2").click()  # 4 or more servings of fruit and/or veggies
         if row['sleep_7_or_more_hours']:
-            driver.find_element_by_id("dc_3").click() # 7 or more hours of sleep
-        driver.find_element_by_css_selector("button.greenButton").click() # Save Changes button
+            driver.find_element_by_id("dc_3").click()  # 7 or more hours of sleep
+        driver.find_element_by_css_selector("button.greenButton").click()  # Save Changes button
         print("{} imported".format(row['date_str']))
         import_record_fileobj.write(row['date_str'] + "\n")
         import_record_fileobj.flush()
@@ -146,10 +168,12 @@ def run(json_filename):
 
     # show current points and percentage
     points = get_current_points(driver)
-    print("{} of 150 points earned so far.  Challenge {} is {}% completed".format(points, current_challenge, round((points/150.0)*100, 0)))
+    print("{} of 150 points earned so far.  Challenge {} is {}% completed".format(points, current_challenge, round((points / 150.0) * 100, 0)))
+
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser(description='Wellness.byu.edu activity tracker importer')
     parser.add_argument('jsonfilename', help='json input filename')
     args = parser.parse_args()
@@ -157,4 +181,3 @@ if __name__ == "__main__":
         parser.error("The jsonfilename passed in ({}) doesn't exist".format(args.jsonfilename))
     else:
         run(args.jsonfilename)
-
