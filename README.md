@@ -53,5 +53,5 @@ current_challenge =
 ```
 
 
-# current limitations (PRs welcome!)
+# Notes
 - Because of the nature of the Wellness site, _only_ steps _or_ active minutes can be recorded. Not both. However, the one that gives you the most points (up to 4) will be chosen, with preference given to steps in a tie.
