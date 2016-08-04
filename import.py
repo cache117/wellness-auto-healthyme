@@ -37,9 +37,9 @@ def date_is_sunday(date_str):
 
 def assert_valid_rows(rows, start_date, end_date):
     for row in rows:
-        if date_is_sunday(row['date_str']):
-            print(row)
-            raise Exception("This row is invalid.  The date is a sunday which is not allowed by the site.")
+        # if date_is_sunday(row['date_str']):
+            # print(row)
+            # raise Exception("This row is invalid.  The date is a sunday which is not allowed by the site.")
         if not (start_date <= datetime.datetime.strptime(row['date_str'], '%Y-%m-%d') <= end_date):
             print(row)
             raise Exception("This row is invalid.  The date ({}) is not inside within the current challenge dates ({} - {})".format(row['date_str'], start_date, end_date))
@@ -124,7 +124,10 @@ def run(json_filename):
     current_challenge = int(config['wellness']['current_challenge'])
     for row in rows:
         if row['date_str'] in import_records:
-            print('{} has already been imported.  It\'s in .import_record_file.  Skipping it.'.format(row['date_str']))
+            print('{} has already been imported.  It\'s in .import_record_file. Skipping it.'.format(row['date_str']))
+            continue
+        if date_is_sunday(row['date_str']):
+            print('{} is a Sunday, which is not allowed by the site. Skipping it.'.format(row['date_str']))
             continue
         driver.get("http://wellness.byu.edu/healthyME/index.php?page=tracker&date={}&challenge={}".format(row['date_str'], current_challenge))
         driver.find_element_by_id("activityDescription").clear()
@@ -144,6 +147,7 @@ def run(json_filename):
             driver.find_element_by_id("trackingTypeMinutes").click()
             driver.find_element_by_id("activityDuration").clear()
             driver.find_element_by_id("activityDuration").send_keys(row['activity_minutes'])
+
         # the following checkboxes are not idempotent
         if row['water_5_or_more_cups']:
             driver.find_element_by_id("dc_1").click()  # 5 or more cups of water
