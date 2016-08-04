@@ -109,10 +109,6 @@ def run(json_filename):
     driver.find_element_by_id("password").send_keys(config['netid']['password'])
     driver.find_element_by_css_selector("input.submit").click()
 
-    # duo
-    if driver.find_element_by_id("duo_iframe") is not None:
-        print("This program currently will not work if you have duo activated.")
-
     # get and validate rows
     start_date, end_date = get_dates_for_challenge(driver)
     rows = get_obj_from_json_filename(json_filename)
