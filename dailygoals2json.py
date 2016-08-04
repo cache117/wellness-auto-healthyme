@@ -30,11 +30,11 @@ def go(startdate, enddate):
         dateobj = dateobj - datetime.timedelta(days=1)
         if (startdate <= dateobj <= enddate) and (dateobj.weekday() != 6):
             results['rows'].append({'date_str': dateobj.date().strftime('%Y-%m-%d'),
-                                    'physical_activity_description': 'walking',
-                                    'activity_minutes': exercised,
-                                    'water_5_or_more_cups': (str2num(wateroz)/8) >= 5,
-                                    'fruit_veg_4_or_more_servings': str2num(servings_fruit_veg) >= 4,
-                                    'sleep_7_or_more_hours': str2num(hours_slept) >= 7})
+                'physical_activity_description': 'walking',
+                'activity_minutes': exercised,
+                'water_5_or_more_cups': (str2num(wateroz)/8) >= 5,
+                'fruit_veg_4_or_more_servings': str2num(servings_fruit_veg) >= 4,
+                'sleep_7_or_more_hours': str2num(hours_slept) >= 7})
     print(json.dumps(results))
 
 if __name__ == "__main__":
