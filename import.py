@@ -137,8 +137,14 @@ def run(json_filename):
         # are worth 4 points. Input the one that gets the most points.
         max_minutes_scored = 60.0
         max_steps_scored = 12000.0
-        minutes_points = row['activity_minutes'] / max_minutes_scored
-        steps_points = row['steps'] / max_steps_scored
+        if 'activity_minutes' in row:
+            minutes_points = float(row['activity_minutes']) / max_minutes_scored
+        else:
+            minutes_points = 0.0
+        if 'steps' in row:
+            steps_points = float(row['steps']) / max_steps_scored
+        else:
+            steps_points = 0.0
         if steps_points >= minutes_points:
             driver.find_element_by_id("trackingTypeSteps").click()
             driver.find_element_by_id("activitySteps").clear()
