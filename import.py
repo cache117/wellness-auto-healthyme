@@ -42,7 +42,7 @@ def assert_valid_rows(rows, start_date, end_date):
             # raise Exception("This row is invalid.  The date is a sunday which is not allowed by the site.")
         if not (start_date <= datetime.datetime.strptime(row['date_str'], '%Y-%m-%d') <= end_date):
             print(row)
-            raise Exception("This row is invalid.  The date ({}) is not inside within the current challenge dates ({} - {})".format(row['date_str'], start_date, end_date))
+            raise Exception("This row is invalid.  The date ({}) is not within the current challenge dates ({} - {})".format(row['date_str'], start_date.date(), end_date.date()))
 
 
 def get_obj_from_json_filename(json_filename):
