@@ -145,7 +145,7 @@ def run(json_filename):
             steps_points = float(row['steps']) / max_steps_scored
         else:
             steps_points = 0.0
-        if steps_points >= minutes_points:
+        if steps_points > minutes_points:
             driver.find_element_by_id("trackingTypeSteps").click()
             driver.find_element_by_id("activitySteps").clear()
             driver.find_element_by_id("activitySteps").send_keys(row['steps'])
